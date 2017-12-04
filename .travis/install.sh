@@ -23,3 +23,5 @@ pip install conan --upgrade
 pip install conan_package_tools
 
 conan user
+conan remote add conan-center https://api.bintray.com/conan/conan/conan-center
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
