@@ -18,7 +18,7 @@ class FlacConan(ConanFile):
     generators = "cmake"
 
     def requirements(self):
-        self.requires("ogg/1.3.3@{}/{}".format(self.user, self.channel))
+        self.requires("ogg/1.3.3@bincrafters/stable")
 
     def source(self):
         source_url = "http://downloads.xiph.org/releases/flac/"
