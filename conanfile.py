@@ -64,7 +64,7 @@ class FlacConan(ConanFile):
         bvars = dict(env_build.vars)
         bvars.update({"UseEnv": "true"})
         with tools.environment_append(bvars), tools.chdir("sources"):
-            cmd = tools.msvc_build_command(self.settings, "flac.sln", targets=targets)
+            cmd = tools.build_sln_command(self.settings, "flac.sln", targets=targets)
             print(cmd)
             self.run(cmd)
 
