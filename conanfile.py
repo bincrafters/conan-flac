@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, AutoToolsBuildEnvironment, tools
+from conans import ConanFile, CMake, tools
 import os
 
 
@@ -27,16 +27,12 @@ class FlacConan(ConanFile):
         self.run("cmake -E tar xf flac.tar.xz")
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, "sources")
-        #Rename to "sources" is a convention to simplify later steps
 
     def build(self):
-        build_env = AutoToolsBuildEnvironment(self)
-        build_env.include_paths = self.deps_cpp_info.includedirs
-        # build_env.cxx_flags.extend(
-        #     ["-I{}".format(f) for f in build_env.include_paths])
-        with tools.chdir("sources"):
-            build_env.configure()
-            build_env.make()
+        cmake = CMake(self)
+        cmake.definitions["CONAN_ARCH"] = str(self.settings.arch)
+        cmake.configure()
+        cmake.build()
 
     def package(self):
         self.copy(pattern="*.h", dst="include", src="sources/include")
