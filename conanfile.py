@@ -17,6 +17,10 @@ class FlacConan(ConanFile):
     default_options = "shared=False"
     generators = "cmake"
 
+    def build_requirements(self):
+        if self.settings.os == "Windows":
+            self.build_requires("nasm/2.13.01@conan/stable")
+
     def requirements(self):
         self.requires("ogg/1.3.3@bincrafters/stable")
 
@@ -40,11 +44,11 @@ class FlacConan(ConanFile):
         self.copy(pattern="*.hpp", dst="include", src="sources/include")
         with tools.chdir("sources"):
             self.copy(pattern="LICENSE")
-            self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
-            self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
+            self.copy(pattern="*.dll", dst="bin", keep_path=False)
+            self.copy(pattern="*.lib", dst="lib", keep_path=False)
             self.copy(pattern="*.a", dst="lib", keep_path=False)
             self.copy(pattern="*.so*", dst="lib", keep_path=False)
-            self.copy(pattern="*.dylib", dst="lib", src="lib", keep_path=False)
+            self.copy(pattern="*.dylib", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
