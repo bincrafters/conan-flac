@@ -70,6 +70,7 @@ endif()
 
 check_include_files(sys/param.h HAVE_SYSPARAM_H)
 check_include_files(stdint.h HAVE_STDINT_H)
+check_include_files(inttypes.h HAVE_INTTYPES_H)
 
 if(UNIX)
   set(CMAKE_REQUIRED_LIBRARIES m)
@@ -87,6 +88,10 @@ endif()
 if(HAVE_STDINT_H)
   target_compile_definitions(libFLAC   PUBLIC -DHAVE_STDINT_H)
   target_compile_definitions(libFLACXX PUBLIC -DHAVE_STDINT_H)
+endif()
+if(HAVE_INTTYPES_H)
+  target_compile_definitions(libFLAC   PUBLIC -DHAVE_INTTYPES_H)
+  target_compile_definitions(libFLACXX PUBLIC -DHAVE_INTTYPES_H)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
