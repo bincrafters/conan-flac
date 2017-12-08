@@ -7,8 +7,9 @@ cmake_policy(SET CMP0005 NEW) # do not escape preprocessor defines
 
 project(libflac)
 
-include(CheckSymbolExists)
+include(CheckFunctionExists)
 include(CheckIncludeFiles)
+
 include(conanbuildinfo.cmake)
 
 conan_basic_setup()
@@ -52,14 +53,22 @@ elseif(${CONAN_ARCH} STREQUAL "x86_64")
     add_definitions(-DENABLE_64_BIT_WORDS)
 endif()
 
-check_symbol_exists(lround math.h HAVE_LROUND)
 check_include_files(sys/param.h HAVE_SYSPARAM_H)
+check_include_files(stdint.h HAVE_STDINT_H)
 
-if (HAVE_LROUND)
+if(UNIX)
+  set(CMAKE_REQUIRED_LIBRARIES m)
+endif()
+check_function_exists(lround HAVE_LROUND)
+
+if(HAVE_LROUND)
   add_definitions(-DHAVE_LROUND)
 endif()
 if(HAVE_SYSPARAM_H)
   add_definitions(-DHAVE_SYS_PARAM_H)
+endif()
+if(HAVE_STDINT_H)
+  add_definitions(-DHAVE_STDINT_H)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
