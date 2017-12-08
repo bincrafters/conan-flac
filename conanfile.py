@@ -13,12 +13,12 @@ class FlacConan(ConanFile):
     license = "https://github.com/xiph/flac/blob/master/COPYING.Xiph"
     exports_sources = ["CMakeLists.txt", "LICENSE"]
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False]}
-    default_options = "shared=False"
+    options = {"shared": [True, False], "use_asm": [True, False]}
+    default_options = "shared=False", "use_asm=False"
     generators = "cmake"
 
     def build_requirements(self):
-        if self.settings.os == "Windows":
+        if self.options.use_asm:
             self.build_requires("nasm/2.13.01@conan/stable")
 
     def requirements(self):
@@ -35,6 +35,7 @@ class FlacConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.definitions["CONAN_ARCH"] = str(self.settings.arch)
+        cmake.definitions["USE_ASM"] = "ON" if self.options.use_asm else "OFF"
         cmake.configure()
         cmake.build()
 

@@ -50,7 +50,7 @@ if(${CONAN_ARCH} STREQUAL "x86")
         PRIVATE -DFLAC__CPU_IA32)
     target_compile_definitions(libFLACXX 
         PRIVATE -DFLAC__CPU_IA32)
-    if(WIN32)
+    if(USE_ASM)
         target_compile_definitions(libFLAC   PRIVATE -DFLAC__HAS_NASM)
         target_compile_definitions(libFLACXX PRIVATE -DFLAC__HAS_NASM)
         file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/nasm)
