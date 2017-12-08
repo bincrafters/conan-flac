@@ -47,16 +47,20 @@ endif()
 
 if(${CONAN_ARCH} STREQUAL "x86")
     target_compile_definitions(libFLAC 
-        PRIVATE -DFLAC__CPU_IA32 -DFLAC__HAS_NASM)
+        PRIVATE -DFLAC__CPU_IA32)
     target_compile_definitions(libFLACXX 
-        PRIVATE -DFLAC__CPU_IA32 -DFLAC__HAS_NASM)
-    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/nasm)
-    foreach(ASM_SOURCE cpu_asm fixed_asm lpc_asm)
-        execute_process(COMMAND nasm "-i${FLAC_SRC_DIR}/src/libFLAC/ia32/" -f win32 -d OBJ_FORMAT_win32 -f win32 
-            -o "${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj" "${FLAC_SRC_DIR}/src/libFLAC/ia32/${ASM_SOURCE}.nasm"
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-        list(APPEND LIBFLAC_SOURCES ${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj)
-    endforeach()
+        PRIVATE -DFLAC__CPU_IA32)
+    if(WIN32)
+        target_compile_definitions(libFLAC   PRIVATE -DFLAC__HAS_NASM)
+        target_compile_definitions(libFLACXX PRIVATE -DFLAC__HAS_NASM)
+        file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/nasm)
+        foreach(ASM_SOURCE cpu_asm fixed_asm lpc_asm)
+            execute_process(COMMAND nasm "-i${FLAC_SRC_DIR}/src/libFLAC/ia32/" -f win32 -d OBJ_FORMAT_win32 -f win32 
+                -o "${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj" "${FLAC_SRC_DIR}/src/libFLAC/ia32/${ASM_SOURCE}.nasm"
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+            list(APPEND LIBFLAC_SOURCES ${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj)
+        endforeach()
+    endif()
 elseif(${CONAN_ARCH} STREQUAL "x86_64")
     target_compile_definitions(libFLAC 
         PRIVATE -DFLAC__CPU_X86_64 -DENABLE_64_BIT_WORDS)
