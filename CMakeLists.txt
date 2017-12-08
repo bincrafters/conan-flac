@@ -110,7 +110,7 @@ else()
   target_compile_definitions(libFLACXX PUBLIC -DFLAC__NO_DLL)
 endif()
 
-target_link_libraries(libFLAC CONAN_PKG::ogg)
+target_link_libraries(libFLAC ${CONAN_LIBS})
 target_link_libraries(libFLACXX libFLAC)
 
 install(TARGETS libFLAC libFLACXX
