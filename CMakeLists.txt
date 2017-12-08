@@ -30,17 +30,26 @@ endif()
 file(GLOB LIBFLACXX_SOURCES
     ${FLAC_SRC_DIR}/src/libFLAC++/*.cpp)
 
-include_directories(${FLAC_SRC_DIR}/include)
-include_directories(${FLAC_SRC_DIR}/src/libFLAC/include)
+add_library(libFLAC ${LIBFLAC_SOURCES})
+add_library(libFLACXX ${LIBFLACXX_SOURCES})
+
+target_include_directories(libFLAC   PUBLIC  ${FLAC_SRC_DIR}/include)
+target_include_directories(libFLACXX PUBLIC  ${FLAC_SRC_DIR}/include)
+target_include_directories(libFLAC   PRIVATE ${FLAC_SRC_DIR}/src/libFLAC/include)
+target_include_directories(libFLACXX PRIVATE ${FLAC_SRC_DIR}/src/libFLAC/include)
 
 if(NOT ${CONAN_ARCH} MATCHES arm)
-    add_definitions(-DFLAC__SSE_OS)
-    add_definitions(-DFLAC__HAS_X86INTRIN)
+    target_compile_definitions(libFLAC 
+        PRIVATE -DFLAC__SSE_OS -DFLAC__HAS_X86INTRIN)
+    target_compile_definitions(libFLACXX 
+        PRIVATE -DFLAC__SSE_OS -DFLAC__HAS_X86INTRIN)
 endif()
 
 if(${CONAN_ARCH} STREQUAL "x86")
-    add_definitions(-DFLAC__CPU_IA32)
-    add_definitions(-DFLAC__HAS_NASM)
+    target_compile_definitions(libFLAC 
+        PRIVATE -DFLAC__CPU_IA32 -DFLAC__HAS_NASM)
+    target_compile_definitions(libFLACXX 
+        PRIVATE -DFLAC__CPU_IA32 -DFLAC__HAS_NASM)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/nasm)
     foreach(ASM_SOURCE cpu_asm fixed_asm lpc_asm)
         execute_process(COMMAND nasm "-i${FLAC_SRC_DIR}/src/libFLAC/ia32/" -f win32 -d OBJ_FORMAT_win32 -f win32 
@@ -49,8 +58,10 @@ if(${CONAN_ARCH} STREQUAL "x86")
         list(APPEND LIBFLAC_SOURCES ${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj)
     endforeach()
 elseif(${CONAN_ARCH} STREQUAL "x86_64")
-    add_definitions(-DFLAC__CPU_X86_64)
-    add_definitions(-DENABLE_64_BIT_WORDS)
+    target_compile_definitions(libFLAC 
+        PRIVATE -DFLAC__CPU_X86_64 -DENABLE_64_BIT_WORDS)
+    target_compile_definitions(libFLACXX 
+        PRIVATE -DFLAC__CPU_X86_64 -DENABLE_64_BIT_WORDS)
 endif()
 
 check_include_files(sys/param.h HAVE_SYSPARAM_H)
@@ -62,41 +73,45 @@ endif()
 check_function_exists(lround HAVE_LROUND)
 
 if(HAVE_LROUND)
-  add_definitions(-DHAVE_LROUND)
+  target_compile_definitions(libFLAC   PUBLIC -DHAVE_LROUND)
+  target_compile_definitions(libFLACXX PUBLIC -DHAVE_LROUND)
 endif()
 if(HAVE_SYSPARAM_H)
-  add_definitions(-DHAVE_SYS_PARAM_H)
+  target_compile_definitions(libFLAC   PUBLIC -DHAVE_SYS_PARAM_H)
+  target_compile_definitions(libFLACXX PUBLIC -DHAVE_SYS_PARAM_H)
 endif()
 if(HAVE_STDINT_H)
-  add_definitions(-DHAVE_STDINT_H)
+  target_compile_definitions(libFLAC   PUBLIC -DHAVE_STDINT_H)
+  target_compile_definitions(libFLACXX PUBLIC -DHAVE_STDINT_H)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
-    add_definitions(-DFLAC__OVERFLOW_DETECT)
+  target_compile_definitions(libFLAC   PUBLIC -DFLAC__OVERFLOW_DETECT)
+  target_compile_definitions(libFLACXX PUBLIC -DFLAC__OVERFLOW_DETECT)
 endif()
 
-add_definitions(-DPACKAGE_VERSION="1.3.2")
-add_definitions(-DFLAC__HAS_OGG)
-add_definitions(-DFLAC__ALIGN_MALLOC_DATA) # 32 byte boundary
-add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-add_definitions(-D_CRT_NONSTDC_NO_WARNINGS)
-
-add_library(libFLAC ${LIBFLAC_SOURCES})
-add_library(libFLACXX ${LIBFLACXX_SOURCES})
+target_compile_definitions(libFLAC   
+  PUBLIC -DFLAC__HAS_OGG -DFLAC__ALIGN_MALLOC_DATA 
+         -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS
+         -DPACKAGE_VERSION="1.3.2")
+target_compile_definitions(libFLACXX 
+  PUBLIC -DFLAC__HAS_OGG -DFLAC__ALIGN_MALLOC_DATA 
+         -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS
+         -DPACKAGE_VERSION="1.3.2")
 
 set_target_properties(libFLAC PROPERTIES OUTPUT_NAME flac)
 set_target_properties(libFLACXX PROPERTIES OUTPUT_NAME flac++)
 
-include_directories(${CONAN_INCLUDE_DIRS})
-target_link_libraries(libFLAC ${CONAN_LIBS})
-target_link_libraries(libFLACXX libFLAC)
-
 if(BUILD_SHARED_LIBS)
-    set_target_properties(libFLACXX PROPERTIES COMPILE_FLAGS -DFLACPP_API_EXPORTS)
-    set_target_properties(libFLAC PROPERTIES COMPILE_FLAGS -DFLAC_API_EXPORTS)
+  target_compile_definitions(libFLAC   PUBLIC -DFLAC_API_EXPORTS)
+  target_compile_definitions(libFLACXX PUBLIC -DFLACPP_API_EXPORTS)
 else()
-    add_definitions(-DFLAC__NO_DLL)
+  target_compile_definitions(libFLAC   PUBLIC -DFLAC__NO_DLL)
+  target_compile_definitions(libFLACXX PUBLIC -DFLAC__NO_DLL)
 endif()
+
+target_link_libraries(libFLAC CONAN_PKG::ogg)
+target_link_libraries(libFLACXX libFLAC)
 
 install(TARGETS libFLAC libFLACXX
     RUNTIME DESTINATION bin

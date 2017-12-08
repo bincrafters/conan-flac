@@ -52,3 +52,6 @@ class FlacConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+        if not self.options.shared:
+            self.output.warn("TIS NOT SHARED")
+            self.cpp_info.defines = ["FLAC__NO_DLL"]
