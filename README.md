@@ -1,6 +1,6 @@
 [![Download](https://api.bintray.com/packages/bincrafters/public-conan/flac%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/flac%3Abincrafters/_latestVersion)
-[![Build Status](https://travis-ci.org/bincrafters/conan-flac.svg?branch=testing%2F1.3.2)](https://travis-ci.org/bincrafters/conan-flac)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-flac?branch=testing%2F1.3.2&svg=true)](https://ci.appveyor.com/project/bincrafters/conan-flac)
+[![Build Status](https://img.shields.io/travis/bincrafters/conan-flac.svg)]()
+[![Build Status](https://img.shields.io/appveyor/ci/bincrafters/conan-flac.svg)]()
 
 [Conan.io](https://conan.io) package recipe for *flac*.
 
@@ -63,4 +63,4 @@ The `use_asm` option will compile ASM implementations of some routines. This doe
 NOTE: The conan recipe license applies only to the files of this recipe, which can be used to build and package flac.
 It does *not* in any way apply or is related to the actual software being packaged.
 
-[LICENSE](git@github.com:sztomi/conan-flac.git/blob/testing/1.3.2/LICENSE.md)
+[LICENSE](LICENSE.md)
