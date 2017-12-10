@@ -16,8 +16,7 @@ conan_basic_setup()
 
 set(FLAC_SRC_DIR ${PROJECT_SOURCE_DIR}/sources)
 
-file(GLOB LIBFLAC_SOURCES
-    ${FLAC_SRC_DIR}/src/libFLAC/*.c)
+file(GLOB LIBFLAC_SOURCES ${FLAC_SRC_DIR}/src/libFLAC/*.c)
 
 if(WIN32)
   list(APPEND LIBFLAC_SOURCES 
@@ -29,6 +28,10 @@ endif()
 
 file(GLOB LIBFLACXX_SOURCES
     ${FLAC_SRC_DIR}/src/libFLAC++/*.cpp)
+
+#if(WIN32 AND BUILD_SHARED_LIBRARIES)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+#endif()
 
 add_library(libFLAC ${LIBFLAC_SOURCES})
 add_library(libFLACXX ${LIBFLACXX_SOURCES})
@@ -60,6 +63,9 @@ if(${CONAN_ARCH} STREQUAL "x86")
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
             list(APPEND LIBFLAC_SOURCES ${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj)
         endforeach()
+    else()
+        target_compile_definitions(libFLAC   PRIVATE -DFLAC__NO_ASM)
+        target_compile_definitions(libFLACXX PRIVATE -DFLAC__NO_ASM)
     endif()
 elseif(${CONAN_ARCH} STREQUAL "x86_64")
     target_compile_definitions(libFLAC 
@@ -112,20 +118,20 @@ set_target_properties(libFLAC PROPERTIES OUTPUT_NAME flac)
 set_target_properties(libFLACXX PROPERTIES OUTPUT_NAME flac++)
 
 if(BUILD_SHARED_LIBS)
-  target_compile_definitions(libFLAC   PUBLIC -DFLAC_API_EXPORTS)
-  target_compile_definitions(libFLACXX PUBLIC -DFLACPP_API_EXPORTS)
-else()
   target_compile_definitions(libFLAC   PUBLIC -DFLAC__NO_DLL)
   target_compile_definitions(libFLACXX PUBLIC -DFLAC__NO_DLL)
+else()
+  target_compile_definitions(libFLAC   PUBLIC -DFLAC_API_EXPORTS)
+  target_compile_definitions(libFLACXX PUBLIC -DFLACPP_API_EXPORTS)
 endif()
-
-target_link_libraries(libFLAC ${CONAN_LIBS})
-target_link_libraries(libFLACXX libFLAC)
 
 install(TARGETS libFLAC libFLACXX
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib)
+
+target_link_libraries(libFLAC ${CONAN_LIBS})
+target_link_libraries(libFLACXX libFLAC)
 
 if(NOT DEFINED LIBFLAC_SKIP_HEADERS)
     install(DIRECTORY ${FLAC_SRC_DIR}/include/FLAC/
