@@ -29,9 +29,9 @@ endif()
 file(GLOB LIBFLACXX_SOURCES
     ${FLAC_SRC_DIR}/src/libFLAC++/*.cpp)
 
-#if(WIN32 AND BUILD_SHARED_LIBRARIES)
+if(WIN32 AND BUILD_SHARED_LIBS)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-#endif()
+endif()
 
 add_library(libFLAC ${LIBFLAC_SOURCES})
 add_library(libFLACXX ${LIBFLACXX_SOURCES})
