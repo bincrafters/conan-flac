@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/bincrafters/conan-flac.svg?branch=stable%2F1.3.2)](https://travis-ci.org/bincrafters/conan-flac)
 [![Build status](https://ci.appveyor.com/api/projects/status/gw37thpnjj4d38nc?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-flac)
 
-[Conan.io](https://conan.io) package recipe for *flac*.
+[Conan.io](https://conan.io) package recipe for [FLAC](https://xiph.org/flac/).
 
 Free Lossless Audio Codec 
 
@@ -12,14 +12,14 @@ The packages generated with this **conanfile** can be found on [Bintray](https:/
 
 ### Basic setup
 
-    $ conan install flac/1.3.2@bincrafters/testing
+    $ conan install flac/1.3.2@bincrafters/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    flac/1.3.2@bincrafters/testing
+    flac/1.3.2@bincrafters/stable
 
     [generators]
     cmake
@@ -38,7 +38,7 @@ The example below shows the commands used to publish to bincrafters conan reposi
 
 The following command both runs all the steps of the conan file, and publishes the package to the local system cache.  This includes downloading dependencies from "build_requires" and "requires" , and then running the build() method.
 
-    $ conan create bincrafters/testing
+    $ conan create bincrafters/stable
 
 
 ### Available Options
@@ -55,7 +55,7 @@ The `use_asm` option will compile ASM implementations of some routines. This doe
 
 ## Upload
 
-    $ conan upload flac/1.3.2@bincrafters/testing --all -r bincrafters
+    $ conan upload flac/1.3.2@bincrafters/stable --all -r bincrafters
 
 
 ## Conan Recipe License
