@@ -8,14 +8,16 @@ import os
 class FlacConan(ConanFile):
     name = "flac"
     version = "1.3.2"
-    url = "https://github.com/xiph/flac"
     description = "Free Lossless Audio Codec "
-    license = "https://github.com/xiph/flac/blob/master/COPYING.Xiph"
-    exports_sources = ["CMakeLists.txt", "LICENSE"]
+    url = "https://github.com/xiph/flac"
+    license = "BSD"
+    exports = ["LICENSE.md"]
+    exports_sources = ["CMakeLists.txt"]
+    generators = "cmake"
+    source_subfolder = "sources"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "use_asm": [True, False]}
     default_options = "shared=False", "use_asm=False"
-    generators = "cmake"
 
     def build_requirements(self):
         if self.options.use_asm:
@@ -30,7 +32,7 @@ class FlacConan(ConanFile):
                        "flac.tar.xz")
         self.run("cmake -E tar xf flac.tar.xz")
         extracted_dir = self.name + "-" + self.version
-        os.rename(extracted_dir, "sources")
+        os.rename(extracted_dir, self.source_subfolder)
 
     def build(self):
         cmake = CMake(self)
@@ -40,16 +42,17 @@ class FlacConan(ConanFile):
         cmake.build()
 
     def package(self):
-        self.copy(pattern="*.h", dst="include", src="sources/include")
-        self.copy(pattern="*.hh", dst="include", src="sources/include")
-        self.copy(pattern="*.hpp", dst="include", src="sources/include")
-        with tools.chdir("sources"):
-            self.copy(pattern="LICENSE")
-            self.copy(pattern="*.dll", dst="bin", keep_path=False)
-            self.copy(pattern="*.lib", dst="lib", keep_path=False)
-            self.copy(pattern="*.a", dst="lib", keep_path=False)
-            self.copy(pattern="*.so*", dst="lib", keep_path=False)
-            self.copy(pattern="*.dylib", dst="lib", keep_path=False)
+        include_dir = os.path.join(self.source_subfolder, "include")
+        
+        self.copy(pattern="LICENSE")
+        self.copy(pattern="*.h", dst="include", src=include_dir)
+        self.copy(pattern="*.hh", dst="include", src=include_dir)
+        self.copy(pattern="*.hpp", dst="include", src=include_dir)
+        self.copy(pattern="*.dll", dst="bin", keep_path=False)
+        self.copy(pattern="*.lib", dst="lib", keep_path=False)
+        self.copy(pattern="*.a", dst="lib", keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", keep_path=False)
+        self.copy(pattern="*.dylib", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
