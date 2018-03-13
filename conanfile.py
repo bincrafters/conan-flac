@@ -8,8 +8,9 @@ import os
 class FlacConan(ConanFile):
     name = "flac"
     version = "1.3.2"
-    description = "Free Lossless Audio Codec "
-    url = "https://github.com/xiph/flac"
+    description = "Free Lossless Audio Codec"
+    homepage = "https://github.com/xiph/flac"
+    url = "https://github.com/bincrafters/conan-flac"
     license = "BSD"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
