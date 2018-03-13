@@ -40,19 +40,11 @@ class FlacConan(ConanFile):
         cmake.definitions["USE_ASM"] = "ON" if self.options.use_asm else "OFF"
         cmake.configure()
         cmake.build()
+        cmake.install()
 
     def package(self):
         self.copy(pattern="LICENSE.md", dst="licenses", keep_path=False)
         self.copy(pattern="COPYING.*", src=self.source_subfolder, dst="licenses", keep_path=False)
-        include_dir = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="*.h", dst="include", src=include_dir)
-        self.copy(pattern="*.hh", dst="include", src=include_dir)
-        self.copy(pattern="*.hpp", dst="include", src=include_dir)
-        self.copy(pattern="*.dll", dst="bin", keep_path=False)
-        self.copy(pattern="*.lib", dst="lib", keep_path=False)
-        self.copy(pattern="*.a", dst="lib", keep_path=False)
-        self.copy(pattern="*.so*", dst="lib", keep_path=False)
-        self.copy(pattern="*.dylib", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
