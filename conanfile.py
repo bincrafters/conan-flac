@@ -32,10 +32,7 @@ class FlacConan(ConanFile):
         self.requires("ogg/1.3.3@bincrafters/stable")
 
     def source(self):
-        source_url = "http://downloads.xiph.org/releases/flac/"
-        tools.download("{0}/flac-{1}.tar.xz".format(source_url, self.version),
-                       "flac.tar.xz")
-        self.run("cmake -E tar xf flac.tar.xz")
+        tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, self.version))
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
 
