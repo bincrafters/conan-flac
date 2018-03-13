@@ -19,6 +19,7 @@ class FlacConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "use_asm": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "use_asm=False", "fPIC=True"
+    requires = "ogg/1.3.3@bincrafters/stable"
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -27,9 +28,6 @@ class FlacConan(ConanFile):
     def build_requirements(self):
         if self.options.use_asm:
             self.build_requires("nasm/2.13.01@conan/stable")
-
-    def requirements(self):
-        self.requires("ogg/1.3.3@bincrafters/stable")
 
     def source(self):
         tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, self.version))
