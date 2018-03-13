@@ -17,8 +17,12 @@ class FlacConan(ConanFile):
     generators = "cmake"
     source_subfolder = "sources"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "use_asm": [True, False]}
-    default_options = "shared=False", "use_asm=False"
+    options = {"shared": [True, False], "use_asm": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False", "use_asm=False", "fPIC=True"
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
 
     def build_requirements(self):
         if self.options.use_asm:
@@ -39,6 +43,10 @@ class FlacConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions["CONAN_ARCH"] = str(self.settings.arch)
         cmake.definitions["USE_ASM"] = "ON" if self.options.use_asm else "OFF"
+
+        if self.settings.os != "Windows":
+            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
+
         cmake.configure()
         cmake.build()
         cmake.install()
