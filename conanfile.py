@@ -42,9 +42,9 @@ class FlacConan(ConanFile):
         cmake.build()
 
     def package(self):
+        self.copy(pattern="LICENSE.md", dst="licenses", keep_path=False)
+        self.copy(pattern="COPYING.*", src=self.source_subfolder, dst="licenses", keep_path=False)
         include_dir = os.path.join(self.source_subfolder, "include")
-        
-        self.copy(pattern="LICENSE")
         self.copy(pattern="*.h", dst="include", src=include_dir)
         self.copy(pattern="*.hh", dst="include", src=include_dir)
         self.copy(pattern="*.hpp", dst="include", src=include_dir)
