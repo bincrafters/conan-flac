@@ -118,11 +118,11 @@ set_target_properties(libFLAC PROPERTIES OUTPUT_NAME flac)
 set_target_properties(libFLACXX PROPERTIES OUTPUT_NAME flac++)
 
 if(BUILD_SHARED_LIBS)
-  target_compile_definitions(libFLAC   PUBLIC -DFLAC__NO_DLL)
-  target_compile_definitions(libFLACXX PUBLIC -DFLAC__NO_DLL)
+  set_target_properties(libFLACXX PROPERTIES COMPILE_FLAGS -DFLACPP_API_EXPORTS)
+  set_target_properties(libFLAC PROPERTIES COMPILE_FLAGS -DFLAC_API_EXPORTS)
 else()
-  target_compile_definitions(libFLAC   PUBLIC -DFLAC_API_EXPORTS)
-  target_compile_definitions(libFLACXX PUBLIC -DFLACPP_API_EXPORTS)
+  target_compile_definitions(libFLACXX PUBLIC -DFLAC__NO_DLL)
+  target_compile_definitions(libFLAC   PUBLIC -DFLAC__NO_DLL)
 endif()
 
 install(TARGETS libFLAC libFLACXX
