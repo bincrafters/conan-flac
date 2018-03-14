@@ -47,7 +47,6 @@ class FlacConan(ConanFile):
         cmake.install()
 
     def package(self):
-        self.copy(pattern="LICENSE.md", dst="licenses", keep_path=False)
         self.copy(pattern="COPYING.*", src=self.source_subfolder, dst="licenses", keep_path=False)
 
     def package_info(self):
