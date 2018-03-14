@@ -140,4 +140,7 @@ if(NOT DEFINED LIBFLAC_SKIP_HEADERS)
     install(DIRECTORY ${FLAC_SRC_DIR}/include/FLAC++/
         DESTINATION include/FLAC++
         FILES_MATCHING PATTERN "*.h")
+    install(DIRECTORY ${FLAC_SRC_DIR}/include/share/
+        DESTINATION include/share
+        FILES_MATCHING PATTERN "*.h")
 endif()
