@@ -1,8 +1,8 @@
 ## Package Status
 
-| Bintray | Appveyor | Travis | 
-|---------|-----------|--------|
-|[![Download](https://api.bintray.com/packages/bincrafters/public-conan/flac%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/flac%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/gw37thpnjj4d38nc?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-flac)|[![Build Status](https://travis-ci.org/bincrafters/conan-flac.svg?branch=stable%2F1.3.2)](https://travis-ci.org/bincrafters/conan-flac)|
+| Bintray | Windows | Linux & macOS | 
+|:--------:|:---------:|:-----------------:|
+|[![Download](https://api.bintray.com/packages/bincrafters/public-conan/flac%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/flac%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-flac?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-flac)|[![Build Status](https://travis-ci.org/bincrafters/conan-flac.svg)](https://travis-ci.org/bincrafters/conan-flac)|
 
 ## Conan.io Information
 
