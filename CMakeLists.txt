@@ -64,14 +64,17 @@ if(${CONAN_ARCH} STREQUAL "x86")
             list(APPEND LIBFLAC_SOURCES ${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj)
         endforeach()
     else()
-        target_compile_definitions(libFLAC   PRIVATE -DFLAC__NO_ASM)
-        target_compile_definitions(libFLACXX PRIVATE -DFLAC__NO_ASM)
     endif()
 elseif(${CONAN_ARCH} STREQUAL "x86_64")
     target_compile_definitions(libFLAC 
         PRIVATE -DFLAC__CPU_X86_64 -DENABLE_64_BIT_WORDS)
     target_compile_definitions(libFLACXX 
         PRIVATE -DFLAC__CPU_X86_64 -DENABLE_64_BIT_WORDS)
+endif()
+
+if(NOT USE_ASM)
+    target_compile_definitions(libFLAC   PRIVATE -DFLAC__NO_ASM)
+    target_compile_definitions(libFLACXX PRIVATE -DFLAC__NO_ASM)
 endif()
 
 check_include_files(sys/param.h HAVE_SYSPARAM_H)
