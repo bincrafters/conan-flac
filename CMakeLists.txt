@@ -63,7 +63,6 @@ if(${CONAN_ARCH} STREQUAL "x86")
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
             list(APPEND LIBFLAC_SOURCES ${CMAKE_BINARY_DIR}/nasm/${ASM_SOURCE}.obj)
         endforeach()
-    else()
     endif()
 elseif(${CONAN_ARCH} STREQUAL "x86_64")
     target_compile_definitions(libFLAC 
