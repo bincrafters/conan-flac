@@ -15,10 +15,10 @@ class FlacConan(ConanFile):
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
-    source_subfolder = "sources"
+    _source_subfolder = "sources"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "use_asm": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "use_asm=False", "fPIC=True"
+    default_options = {'shared': False, 'use_asm': False, 'fPIC': True}
     requires = "ogg/1.3.3@bincrafters/stable"
 
     def config_options(self):
@@ -32,9 +32,9 @@ class FlacConan(ConanFile):
     def source(self):
         tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, self.version))
         extracted_dir = self.name + "-" + self.version
-        os.rename(extracted_dir, self.source_subfolder)
+        os.rename(extracted_dir, self._source_subfolder)
 
-    def configure_cmake(self):
+    def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["CONAN_ARCH"] = str(self.settings.arch)
         cmake.definitions["USE_ASM"] = self.options.use_asm
@@ -44,13 +44,13 @@ class FlacConan(ConanFile):
         return cmake
 
     def build(self):
-        cmake = self.configure_cmake()
+        cmake = self._configure_cmake()
         cmake.build()
 
     def package(self):
-        cmake = self.configure_cmake()
+        cmake = self._configure_cmake()
         cmake.install()
-        self.copy(pattern="COPYING.*", dst="licenses", src=self.source_subfolder, keep_path=False)
+        self.copy(pattern="COPYING.*", dst="licenses", src=self._source_subfolder, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
