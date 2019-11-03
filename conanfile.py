@@ -38,8 +38,6 @@ class FlacConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions["CONAN_ARCH"] = str(self.settings.arch)
         cmake.definitions["USE_ASM"] = self.options.use_asm
-        if self.settings.os != "Windows":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
         cmake.configure()
         return cmake
 
