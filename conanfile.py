@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from conans import ConanFile, CMake, tools
 import os
 
@@ -27,7 +24,7 @@ class FlacConan(ConanFile):
 
     def build_requirements(self):
         if self.options.use_asm:
-            self.build_requires("nasm/2.13.01@conan/stable")
+            self.build_requires("nasm/2.13.02")
 
     def source(self):
         tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, self.version))
