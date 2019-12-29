@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from conans import ConanFile, CMake, tools
 import os
 
@@ -19,7 +16,7 @@ class FlacConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "use_asm": [True, False], "fPIC": [True, False]}
     default_options = {'shared': False, 'use_asm': False, 'fPIC': True}
-    requires = "ogg/1.3.3@bincrafters/stable"
+    requires = "ogg/1.3.4"
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -27,7 +24,7 @@ class FlacConan(ConanFile):
 
     def build_requirements(self):
         if self.options.use_asm:
-            self.build_requires("nasm/2.13.01@conan/stable")
+            self.build_requires("nasm/2.13.02")
 
     def source(self):
         tools.get("{0}/archive/{1}.tar.gz".format(self.homepage, self.version))
@@ -38,8 +35,6 @@ class FlacConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions["CONAN_ARCH"] = str(self.settings.arch)
         cmake.definitions["USE_ASM"] = self.options.use_asm
-        if self.settings.os != "Windows":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
         cmake.configure()
         return cmake
 
