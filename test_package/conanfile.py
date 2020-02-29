@@ -1,4 +1,4 @@
-from conans import ConanFile, CMake, tools, RunEnvironment
+from conans import ConanFile, CMake, tools
 import os
 
 
@@ -16,12 +16,7 @@ class TestPackageConan(ConanFile):
         self.copy("sample.wav", src=test_package_dir, dst=".")
 
     def test(self):
-        with tools.environment_append(RunEnvironment(self).vars):
-            bin_path = os.path.join("bin", "test_package")
+        if not tools.cross_building(self.settings):
             args = " sample.wav sample.flac"
-            if self.settings.os == "Windows":
-                self.run(bin_path + args)
-            elif self.settings.os == "Macos":
-                self.run("DYLD_LIBRARY_PATH=%s %s" % (os.environ.get('DYLD_LIBRARY_PATH', ''), bin_path + args))
-            else:
-                self.run("LD_LIBRARY_PATH=%s %s" % (os.environ.get('LD_LIBRARY_PATH', ''), bin_path + args))
+            bin_path = os.path.join("bin", "test_package")
+            self.run(bin_path + args, run_environment=True)
