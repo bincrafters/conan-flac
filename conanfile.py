@@ -21,6 +21,9 @@ class FlacConan(ConanFile):
         if self.settings.os == "Windows":
             self.options.remove("fPIC")
 
+    def build_requirements(self):
+        self.build_requires("nasm/2.14")
+
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = self.name + "-" + self.version
