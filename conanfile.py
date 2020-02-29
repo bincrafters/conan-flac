@@ -42,6 +42,8 @@ class FlacConan(ConanFile):
         cmake.install()
         self.copy(pattern="COPYING.*", dst="licenses", src=self._source_subfolder, keep_path=False)
         self.copy(pattern="*.h", dst=os.path.join("include", "share"), src=os.path.join(self._source_subfolder, "include", "share"), keep_path=False)
+        self.copy(pattern="*.h", dst=os.path.join("include", "share", "grabbag"),
+                  src=os.path.join(self._source_subfolder, "include", "share", "grabbag"), keep_path=False)
         tools.rmdir(os.path.join(self.package_folder, "share"))
 
     def package_info(self):
