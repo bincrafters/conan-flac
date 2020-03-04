@@ -33,6 +33,7 @@ class FlacConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions["BUILD_EXAMPLES"] = False
         cmake.definitions["BUILD_DOCS"] = False
+        cmake.definitions["BUILD_TESTING"] = False
         cmake.configure()
         return cmake
 
